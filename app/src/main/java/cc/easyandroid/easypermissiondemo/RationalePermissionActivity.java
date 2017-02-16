@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 Yan Zhenjie
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package cc.easyandroid.easypermissiondemo;
 
 import android.Manifest;
@@ -29,14 +14,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import cc.easyandroid.easypermission.AndPermission;
+import cc.easyandroid.easypermission.EasyPermission;
 import cc.easyandroid.easypermission.PermissionListener;
 import cc.easyandroid.easypermission.Rationale;
 import cc.easyandroid.easypermission.RationaleListener;
 
-/**
- * Created by Yan Zhenjie on 2016/9/10.
- */
 public class RationalePermissionActivity extends AppCompatActivity implements PermissionListener {
 
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 100;
@@ -56,7 +38,7 @@ public class RationalePermissionActivity extends AppCompatActivity implements Pe
             @Override
             public void onClick(View v) {
                 // 申请权限。
-                AndPermission.with(RationalePermissionActivity.this)
+                EasyPermission.with(RationalePermissionActivity.this)
                         .requestCode(REQUEST_CODE_PERMISSION_LOCATION)
                         .permission(Manifest.permission.ACCESS_FINE_LOCATION)
                                 // rationale作用是：用户拒绝一次权限，再次申请时先征求用户同意，再打开授权对话框，避免用户勾选不再提示。
@@ -74,7 +56,7 @@ public class RationalePermissionActivity extends AppCompatActivity implements Pe
         public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
 
             // 这里使用自定义对话框，如果不想自定义，用AndPermission默认对话框：
-            // AndPermission.rationaleDialog(Context, Rationale).show();
+            // EasyPermission.rationaleDialog(Context, Rationale).show();
 
             // 自定义对话框。
             new AlertDialog.Builder(RationalePermissionActivity.this)
@@ -116,20 +98,20 @@ public class RationalePermissionActivity extends AppCompatActivity implements Pe
         }
 
         // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+        if (EasyPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+            EasyPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
 
 
             // 第二种：用自定义的提示语。
-//             AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING)
+//             EasyPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING)
 //                     .setTitle("权限申请失败")
 //                     .setMessage("我们需要的一些权限被您拒绝或者系统发生错误申请失败，请您到设置页面手动授权，否则功能无法正常使用！")
 //                     .setPositiveButton("好，去设置")
 //                     .show();
 
 //            第三种：自定义dialog样式。
-//            SettingService settingHandle = AndPermission.defineSettingDialog(this, REQUEST_CODE_SETTING);
+//            SettingService settingHandle = EasyPermission.defineSettingDialog(this, REQUEST_CODE_SETTING);
 //            你的dialog点击了确定调用：
 //            settingHandle.execute();
 //            你的dialog点击了取消调用：
@@ -143,7 +125,7 @@ public class RationalePermissionActivity extends AppCompatActivity implements Pe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // listener方式，最后一个参数是PermissionListener。
-        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        EasyPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override

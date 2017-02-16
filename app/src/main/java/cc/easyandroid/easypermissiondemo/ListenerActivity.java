@@ -1,18 +1,3 @@
-/*
- * Copyright 漏 Yan Zhenjie. All Rights Reserved
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package cc.easyandroid.easypermissiondemo;
 
 import android.Manifest;
@@ -27,7 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import cc.easyandroid.easypermission.AndPermission;
+import cc.easyandroid.easypermission.EasyPermission;
 import cc.easyandroid.easypermission.PermissionListener;
 import cc.easyandroid.easypermission.Rationale;
 import cc.easyandroid.easypermission.RationaleListener;
@@ -57,8 +42,8 @@ public class ListenerActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_request_single: {
-                // 鐢宠鍗曚釜鏉冮檺銆?
-                AndPermission.with(this)
+                // 申请单个权限。
+                EasyPermission.with(this)
                         .requestCode(REQUEST_CODE_PERMISSION_SD)
                         .permission(Manifest.permission.WRITE_CALENDAR)
                                 // rationale作用是：用户拒绝一次权限，再次申请时先征求用户同意，再打开授权对话框，避免用户勾选不再提示。
@@ -66,14 +51,14 @@ public class ListenerActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
                                 // 这里的对话框可以自定义，只要调用rationale.resume()就可以继续申请。
-                                AndPermission.rationaleDialog(ListenerActivity.this, rationale).show();
+                                EasyPermission.rationaleDialog(ListenerActivity.this, rationale).show();
                             }
                         }).send();
                 break;
             }
             case R.id.btn_request_multi: {
                 // 申请多个权限。
-                AndPermission.with(this)
+                EasyPermission.with(this)
                         .requestCode(REQUEST_CODE_PERMISSION_OTHER)
                         .permission(Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_SMS)
                                 // rationale作用是：用户拒绝一次权限，再次申请时先征求用户同意，再打开授权对话框，避免用户勾选不再提示。
@@ -81,7 +66,7 @@ public class ListenerActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
                                 // 这里的对话框可以自定义，只要调用rationale.resume()就可以继续申请。
-                                AndPermission.rationaleDialog(ListenerActivity.this, rationale).show();
+                                EasyPermission.rationaleDialog(ListenerActivity.this, rationale).show();
                             }
                         }).send();
                 break;
@@ -117,19 +102,19 @@ public class ListenerActivity extends AppCompatActivity implements View.OnClickL
         }
 
         // 用户勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+        if (EasyPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+            EasyPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
 
             // 第二种：用自定义的提示语。
-//             AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING)
+//             EasyPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING)
 //                     .setTitle("权限申请失败")
 //                     .setMessage("我们需要的一些权限被您拒绝或者系统发生错误申请失败，请您到设置页面手动授权，否则功能无法正常使用！")
 //                     .setPositiveButton("好，去设置")
 //                     .show();
 
 //            第三种：自定义dialog样式。
-//            SettingService settingService = AndPermission.defineSettingDialog(this, REQUEST_CODE_SETTING);
+//            SettingService settingService = EasyPermission.defineSettingDialog(this, REQUEST_CODE_SETTING);
 //            你的dialog点击了确定调用：
 //            settingService.execute();
 //            你的dialog点击了取消调用：
@@ -151,7 +136,7 @@ public class ListenerActivity extends AppCompatActivity implements View.OnClickL
          * @param grantResults 请求结果。
          * @param listener PermissionListener 对象。
          */
-        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        EasyPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
